@@ -21,8 +21,14 @@ BaseController.prototype = {
         }
 
         if(this.getHeader(BaseController.U_API_KEY)){
-            this.emit('dispatchAction', {status: true});
-            return;
+            user.existsByAPIKey(this.getHeader(BaseController.U_API_KEY), function(status, row){
+                if(status){
+                    self.member = row;
+                    self.emit('dispatchAction', {status: true});
+                }else{
+                    self.exit({message: "Api Key Incorrect"}, 403);
+                }
+            });
         }
 
         //if is product api key
