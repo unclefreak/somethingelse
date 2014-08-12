@@ -14,6 +14,22 @@ BaseController.prototype = {
 	_init: function(dispatchActionCallback){
         var self = this;
         var user = new User();
+        //if is user api key
+        if(!this.getHeader(BaseController.U_API_KEY) && !this.getHeader(BaseController.P_API_KEY)){
+            this.exit({error: 'Miss Api Key'}, 406);
+            return;
+        }
+
+        if(this.getHeader(BaseController.U_API_KEY)){
+            this.emit('dispatchAction', {status: true});
+            return;
+        }
+
+        //if is product api key
+        if(this.getHeader(BaseController.P_API_KEY)){
+            this.emit('dispatchAction', {status: true});
+            return;
+        }
         user.existsByAPIKey(this._getAPIKey(), function(status, row){
             if(!status){
                 self.exit({message: "U-ApiKey Incorrect"}, 403);
@@ -23,6 +39,10 @@ BaseController.prototype = {
             }
         });
 	},
+
+    getHeader: function(key){
+        return this.request.getHeader(key);
+    },
 
 	_getAPIKey: function(){
 		return this.request.getHeader('U-ApiKey'.toLowerCase());
@@ -43,5 +63,8 @@ BaseController.prototype = {
 }
 
 oo.extend(BaseController, AbstractController);
+
+BaseController.U_API_KEY = 'u-apikey';
+BaseController.P_API_KEY = 'p-apikey';
 
 module.exports = BaseController;
