@@ -1,11 +1,20 @@
-var ModelBase = function(){
-    this._initModelBase();
+var oo = require('mvc/utils/oo');
+
+var ModelBase = function(options){
+    this._initModelBase(options);
 };
 
 ModelBase.prototype = {
-    _initModelBase: function(){
+    _initModelBase: function(options){
+		this.options = oo.mix({
 
+		}, this.options);
+	    this.options = oo.mix(this.options, options);
     },
+
+	retrieveData: function(pairs){
+
+	},
 
     getTableInfo: function(tableName){
 
