@@ -25,6 +25,16 @@ var extend = function(subClass, baseClass){
 };
 
 exports.extend = extend;
+
+var isPlainObject = function(obj){
+	if(!obj.hasOwnProperty('constructor') && typeof obj == 'object' && obj.constructor == Object){
+		return true;
+	}
+	
+	return false;
+}
+
+
 /**
  * mix js object
  * @param {Object} base
